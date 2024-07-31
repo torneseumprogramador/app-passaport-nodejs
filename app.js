@@ -17,12 +17,15 @@ const JwtStrategy = passportJWT.Strategy;
 
 const jwtOptions = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-  secretOrKey: 'your_jwt_secret',  // Certifique-se de substituir isso por uma chave secreta segura
+  secretOrKey: 'your_jwt_secret',
 };
 
 const strategy = new JwtStrategy(jwtOptions, (jwt_payload, done) => {
-  // Simulando uma consulta de banco de dados
-  const user = { id: jwt_payload.id }; // Aqui você deve buscar o usuário no banco de dados
+  const users = [
+    { id: 'admin@example.com', role: 'admin' },
+    { id: 'user@example.com', role: 'user' },
+  ];
+  const user = users.find(user => user.id === jwt_payload.id);
   if (user) {
     return done(null, user);
   } else {
@@ -35,8 +38,13 @@ app.use(passport.initialize());
 
 app.post('/login', (req, res) => {
   const { email, password } = req.body;
-  if (email && password) {
-    const payload = { id: email };  // Normalmente você usaria um ID de usuário do banco de dados aqui
+  const users = [
+    { id: 'admin@example.com', role: 'admin', password: 'password' },
+    { id: 'user@example.com', role: 'user', password: 'password' },
+  ];
+  const user = users.find(user => user.id === email && user.password === password);
+  if (user) {
+    const payload = { id: user.id, role: user.role };
     const token = jwt.sign(payload, jwtOptions.secretOrKey);
     res.cookie('jwt', token, { httpOnly: true });
     res.json({ message: 'Login successful', token: token });
@@ -45,8 +53,36 @@ app.post('/login', (req, res) => {
   }
 });
 
+const authorize = (roles = []) => {
+  if (typeof roles === 'string') {
+    roles = [roles];
+  }
+
+  return [
+    passport.authenticate('jwt', { session: false }),
+    (req, res, next) => {
+      if (roles.length && !roles.includes(req.user.role)) {
+        return res.status(403).json({ message: 'Forbidden' });
+      }
+      next();
+    }
+  ];
+};
+
 app.get('/current', passport.authenticate('jwt', { session: false }), (req, res) => {
-  res.json({ message: 'Authenticated', user: req.user });
+  res.json({ message: 'Current Authenticated', user: req.user });
+});
+
+app.get('/admin', authorize('admin'), (req, res) => {
+  res.json({ message: 'Admin content', user: req.user });
+});
+
+app.use((err, req, res, next) => {
+  if (err.name === 'UnauthorizedError') {
+    res.status(401).json({ message: 'Invalid token' });
+  } else {
+    next(err);
+  }
 });
 
 app.listen(PORT, () => {
