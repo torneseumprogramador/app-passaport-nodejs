@@ -17,15 +17,15 @@ const JwtStrategy = passportJWT.Strategy;
 
 const jwtOptions = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-  secretOrKey: 'your_jwt_secret',
+  secretOrKey: 'coder-house-secret',
 };
 
 const strategy = new JwtStrategy(jwtOptions, (jwt_payload, done) => {
   const users = [
-    { id: 'admin@example.com', role: 'admin' },
-    { id: 'user@example.com', role: 'user' },
+    { email: 'admin@example.com', role: 'admin' },
+    { email: 'user@example.com', role: 'user' },
   ];
-  const user = users.find(user => user.id === jwt_payload.id);
+  const user = users.find(user => user.email === jwt_payload.email);
   if (user) {
     return done(null, user);
   } else {
@@ -39,17 +39,17 @@ app.use(passport.initialize());
 app.post('/login', (req, res) => {
   const { email, password } = req.body;
   const users = [
-    { id: 'admin@example.com', role: 'admin', password: 'password' },
-    { id: 'user@example.com', role: 'user', password: 'password' },
+    { email: 'admin@example.com', role: 'admin', password: 'password' },
+    { email: 'user@example.com', role: 'user', password: 'password' },
   ];
-  const user = users.find(user => user.id === email && user.password === password);
+  const user = users.find(user => user.email === email && user.password === password);
   if (user) {
-    const payload = { id: user.id, role: user.role };
+    const payload = { email: user.email, role: user.role };
     const token = jwt.sign(payload, jwtOptions.secretOrKey);
     res.cookie('jwt', token, { httpOnly: true });
     res.json({ message: 'Login successful', token: token });
   } else {
-    res.status(401).json({ message: 'Invalid credentials' });
+    res.status(401).json({ message: 'Invalemail credentials' });
   }
 });
 
@@ -62,7 +62,7 @@ const authorize = (roles = []) => {
     passport.authenticate('jwt', { session: false }),
     (req, res, next) => {
       if (roles.length && !roles.includes(req.user.role)) {
-        return res.status(403).json({ message: 'Forbidden' });
+        return res.status(403).json({ message: 'Forbemailden' });
       }
       next();
     }
@@ -73,13 +73,13 @@ app.get('/current', passport.authenticate('jwt', { session: false }), (req, res)
   res.json({ message: 'Current Authenticated', user: req.user });
 });
 
-app.get('/admin', authorize('admin'), (req, res) => {
+app.get('/admin', authorize(['admin']), (req, res) => {
   res.json({ message: 'Admin content', user: req.user });
 });
 
 app.use((err, req, res, next) => {
   if (err.name === 'UnauthorizedError') {
-    res.status(401).json({ message: 'Invalid token' });
+    res.status(401).json({ message: 'Invalemail token' });
   } else {
     next(err);
   }
