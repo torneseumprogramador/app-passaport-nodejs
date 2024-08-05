@@ -12,6 +12,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cookieParser());
 
+//===== Aula 22 ===========
 const ExtractJwt = passportJWT.ExtractJwt;
 const JwtStrategy = passportJWT.Strategy;
 
@@ -76,6 +77,7 @@ app.get('/current', passport.authenticate('jwt', { session: false }), (req, res)
 app.get('/admin', authorize(['admin']), (req, res) => {
   res.json({ message: 'Admin content', user: req.user });
 });
+//===== Aula 22 ===========
 
 app.use((err, req, res, next) => {
   if (err.name === 'UnauthorizedError') {
