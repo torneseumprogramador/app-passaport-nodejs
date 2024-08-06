@@ -21,12 +21,31 @@ app.use(cookieParser());
 app.param('word', function (req, res, next, word) {
   // lógica para validar e processar o parâmetro `word`
   console.log(":::: aqui ::::")
+  if(word === "dds"){
+    return res.send("dds como parametro não é permitido", 400)
+  }
+
   req.word = word;
   next();
 });
 
-app.get('/word/:word', function (req, res, next) {
-  res.send(req.word);
+app.param('teste', function (req, res, next, teste) {
+  // lógica para validar e processar o parâmetro `word`
+  console.log(":::: aqui ::::")
+  if(teste === "dds"){
+    return res.send("dds como parametro não é permitido", 400)
+  }
+
+  req.teste = teste;
+  next();
+});
+
+app.get('/word/:word/teste/:teste', function (req, res, next) {
+  res.send(`${req.word} - ${req.teste}`);
+});
+
+app.get('*', function (req, res, next) {
+  res.send("Oláaa pessoal");
 });
 
 

@@ -77,7 +77,7 @@ customRouter.get('/public', ['PUBLIC'], (req, res) => {
 });
 
 // Endpoint para usuários
-customRouter.get('/user', ['USER'], (req, res) => {
+customRouter.get('/user', ['USER', "ADMIN"], (req, res) => {
   res.sendSuccessMessage('User Endpoint');
 });
 

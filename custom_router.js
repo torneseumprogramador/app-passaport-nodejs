@@ -22,12 +22,29 @@ class MyRouter extends CustomRouter {
   }
 
   init() {
-    this.applyCallbacks({
-      method: 'get',
-      path: '/' },
+    this.applyCallbacks(
+      {
+        method: 'get',
+        path: '/' 
+      },
       [
         (req, res) => {
           res.send('Hello, world!')
+        }
+      ]
+    );
+
+    this.applyCallbacks(
+      {
+        method: 'get',
+        path: '/dados' 
+      },
+      [
+        (req, res) => {
+          res.json([
+            {nome: "teste1"},
+            {nome: "teste2"},
+          ])
         }
       ]
     );
