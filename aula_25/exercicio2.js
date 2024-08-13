@@ -11,9 +11,9 @@ app.get('/', (req, res) => {
 
 app.get('/calculo-bloq', (req, res) => {
     let sum = 0;
-    for (let i = 0; i <= 1000000000; i++) {
+    for (let i = 0; i <= 100000; i++) {
         sum += i;
-        // console.log(i);
+        console.log(i);
     }
     res.send(`Blocked calculation result: [${sum}]`);
 });

@@ -6,9 +6,12 @@ const program = new Command();
 program
   .option('-d, --debug', 'output extra debugging')
   .option('-p, --port <number>', 'set port number', '3000')
+  .option('-e, --env <string>', 'o ambiente', 'development')
   .parse(process.argv);
 
 const options = program.opts();
+
+console.log(options)
 
 // Criando a aplicação Express
 const app = express();

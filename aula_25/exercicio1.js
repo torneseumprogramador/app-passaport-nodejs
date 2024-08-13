@@ -15,12 +15,14 @@ function listNumbers(...numbers) {
       128: Erro de sinal inválido.
       >128: Os valores acima de 128 geralmente indicam que o processo terminou devido a um sinal de interrupção (por exemplo, 128 + número_do_sinal).
       */
-      process.exit(-4);
+      process.exit(2);
   } else {
       console.log('All parameters are numbers:', numbers);
   }
+
+  console.log("Fazendo um teste")
 }
 
 // Teste com parâmetros válidos e inválidos
 // listNumbers(1, 2, 3, 'a', true); // Irá disparar o erro
-listNumbers(1, 2, 3, 4, 5); // Irá exibir os números
+listNumbers(1, 2, 3, 4, 5, 6); // Irá exibir os números

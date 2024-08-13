@@ -20,7 +20,7 @@ if (options.mode === 'development') {
   envFilePath = path.resolve(__dirname, '.env.production');
 } else {
   console.error('No valid mode specified. Use --mode development or --mode production');
-  process.exit(1);
+  process.exit(2);
 }
 
 // Carregando o arquivo .env correto
