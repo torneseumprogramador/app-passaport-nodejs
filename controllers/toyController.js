@@ -7,6 +7,11 @@ exports.getToys = (req, res) => {
 
 exports.createToy = (req, res) => {
     const toy = req.body;
-    const createdToy = toyService.createToy(toy);
-    res.status(201).json(createdToy);
+    try{
+        const createdToy = toyService.createToy(toy);
+        res.status(201).json(createdToy);
+    }
+    catch(errorMessage) {
+        res.status(400).json({error: errorMessage});
+    }
 };

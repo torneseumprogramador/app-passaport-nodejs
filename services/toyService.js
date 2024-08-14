@@ -5,6 +5,7 @@ exports.getToys = () => {
 };
 
 exports.createToy = (toy) => {
-    // Aqui você pode adicionar regras de negócio, como validações
+    if(!toy.name) throw "The name is required"
+
     return toyRepository.save(toy);
 };
