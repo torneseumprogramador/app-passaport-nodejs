@@ -1,0 +1,16 @@
+<html>
+  <head>
+    <title>Renderização via Server Side</title>
+  </head>
+  <body>
+    <h1>Home page</h1>
+    <ul>
+      <% for (user of users) { %>
+        <li>
+          <div>Nome: <%= user.name %></div>
+          <div>Telefone: <%= user.phone %></div>
+        </li>
+      <% } %>
+    </ul>
+  </body>
+</html>
